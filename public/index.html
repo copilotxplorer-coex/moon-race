@@ -18,34 +18,37 @@
     <button class="nav-btn" data-screen="dashboard">Dashboard</button>
     <button class="nav-btn" data-screen="stats">Statistics</button>
   </div>
+  <!-- Visitor Counter in Nav -->
+  <div class="nav-visitors">
+    <div class="visitor-badge online">
+      <span class="visitor-dot pulse-dot"></span>
+      <span id="visitor-online">0</span> online
+    </div>
+    <div class="visitor-badge total">
+      <span class="visitor-icon">👁️</span>
+      <span id="visitor-total">0</span> visits
+    </div>
+  </div>
 </nav>
 
 <!-- LOBBY -->
 <section id="screen-lobby" class="screen active">
   <div class="lobby-wrap">
-
-    <!-- Step 1: Captain Name -->
     <div class="step-card">
       <div class="step-header"><span class="step-num">01</span><span class="step-label">CAPTAIN NAME</span></div>
       <div class="captain-input-wrap">
         <input type="text" id="captain-name" class="captain-input" placeholder="Enter your name, Captain..." maxlength="24" autocomplete="off"/>
       </div>
     </div>
-
-    <!-- Step 2: Country -->
     <div class="step-card">
       <div class="step-header"><span class="step-num">02</span><span class="step-label">SELECT YOUR NATION</span></div>
       <div class="selected-country-preview hidden" id="selected-country-preview"></div>
       <div id="country-grid" class="country-grid"></div>
     </div>
-
-    <!-- Step 3: Rocket -->
     <div class="step-card">
       <div class="step-header"><span class="step-num">03</span><span class="step-label">SELECT YOUR ROCKET</span></div>
       <div id="rocket-grid" class="rocket-grid"></div>
     </div>
-
-    <!-- Launch -->
     <div class="launch-area">
       <div id="launch-summary" class="launch-summary hidden"></div>
       <button id="btn-launch" class="btn-launch" disabled>LAUNCH 🚀</button>

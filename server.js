@@ -1,5 +1,7 @@
 const express = require("express");
 const http = require("http");
+const fs = require("fs");
+const path = require("path");
 const { Server } = require("socket.io");
 
 const app = express();
@@ -29,6 +31,35 @@ const ROCKETS = {
 
 const rockets = {};
 const stats   = [];
+
+/* ══════════════════════════════════════
+   ★ VISITOR COUNTER (persistent file)
+   ══════════════════════════════════════ */
+const COUNTER_FILE = path.join(__dirname, "visitor_count.json");
+
+function loadCounter() {
+  try {
+    if (fs.existsSync(COUNTER_FILE)) {
+      const data = JSON.parse(fs.readFileSync(COUNTER_FILE, "utf8"));
+      return { total: data.total || 0, online: 0 };
+    }
+  } catch(e) { console.log("Counter file read error, starting fresh"); }
+  return { total: 0, online: 0 };
+}
+
+function saveCounter() {
+  try {
+    fs.writeFileSync(COUNTER_FILE, JSON.stringify({ total: visitors.total }));
+  } catch(e) { console.log("Counter file write error"); }
+}
+
+const visitors = loadCounter();
+
+function broadcastVisitors() {
+  io.emit("visitors", { total: visitors.total, online: visitors.online });
+}
+
+/* ══════════════════════════════════════ */
 
 function broadcastState(){
   const active = {};
@@ -61,6 +92,18 @@ setInterval(()=>{
 }, 100);
 
 io.on("connection", socket=>{
+  /* ── Visitor tracking ── */
+  visitors.total++;
+  visitors.online++;
+  saveCounter();
+  broadcastVisitors();
+
+  socket.on("disconnect", ()=>{
+    visitors.online = Math.max(0, visitors.online - 1);
+    broadcastVisitors();
+  });
+
+  /* ── Game init ── */
   socket.emit("init", { ROCKETS, MOON });
   broadcastState();
 
@@ -87,4 +130,4 @@ io.on("connection", socket=>{
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, ()=> console.log(`🚀  Moon Race v4 running on port ${PORT}`));
+server.listen(PORT, ()=> console.log(`🚀  Moon Race v5 running on port ${PORT}`));

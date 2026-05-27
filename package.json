@@ -1,7 +1,7 @@
 {
   "name": "moon-race",
-  "version": "4.0.0",
-  "description": "Moon Race v4 \u2014 Clean White UI + Captain + Flags",
+  "version": "5.0.0",
+  "description": "Moon Race v5 \u2014 with Visitor Counter",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
