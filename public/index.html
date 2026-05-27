@@ -9,8 +9,6 @@
 <link rel="stylesheet" href="/css/style.css"/>
 </head>
 <body>
-
-<!-- NAV -->
 <nav id="nav">
   <div class="nav-brand"><span class="nav-icon">🚀</span> MOON RACE</div>
   <div class="nav-links">
@@ -18,27 +16,17 @@
     <button class="nav-btn" data-screen="dashboard">Dashboard</button>
     <button class="nav-btn" data-screen="stats">Statistics</button>
   </div>
-  <!-- Visitor Counter in Nav -->
   <div class="nav-visitors">
-    <div class="visitor-badge online">
-      <span class="visitor-dot pulse-dot"></span>
-      <span id="visitor-online">0</span> online
-    </div>
-    <div class="visitor-badge total">
-      <span class="visitor-icon">👁️</span>
-      <span id="visitor-total">0</span> visits
-    </div>
+    <div class="visitor-badge online"><span class="visitor-dot pulse-dot"></span><span id="visitor-online">0</span> online</div>
+    <div class="visitor-badge total"><span class="visitor-icon">👁️</span><span id="visitor-total">0</span> visits</div>
   </div>
 </nav>
 
-<!-- LOBBY -->
 <section id="screen-lobby" class="screen active">
   <div class="lobby-wrap">
     <div class="step-card">
       <div class="step-header"><span class="step-num">01</span><span class="step-label">CAPTAIN NAME</span></div>
-      <div class="captain-input-wrap">
-        <input type="text" id="captain-name" class="captain-input" placeholder="Enter your name, Captain..." maxlength="24" autocomplete="off"/>
-      </div>
+      <input type="text" id="captain-name" class="captain-input" placeholder="Enter your name, Captain..." maxlength="24" autocomplete="off"/>
     </div>
     <div class="step-card">
       <div class="step-header"><span class="step-num">02</span><span class="step-label">SELECT YOUR NATION</span></div>
@@ -56,7 +44,6 @@
   </div>
 </section>
 
-<!-- COUNTDOWN -->
 <div id="countdown-overlay" class="countdown-overlay hidden">
   <div class="countdown-content">
     <div class="countdown-captain" id="cd-captain"></div>
@@ -68,37 +55,23 @@
   </div>
 </div>
 
-<!-- FLIGHT -->
 <section id="screen-flight" class="screen">
   <canvas id="flight-canvas"></canvas>
   <div id="flight-hud" class="flight-hud">
     <div class="hud-captain" id="hud-captain"></div>
-    <div class="hud-top">
-      <div class="hud-country" id="hud-country"></div>
-      <div class="hud-rocket" id="hud-rocket"></div>
-    </div>
+    <div class="hud-top"><div class="hud-country" id="hud-country"></div><div class="hud-rocket" id="hud-rocket"></div></div>
     <div class="hud-distance"><span id="hud-dist">0.0</span> <small>km</small></div>
-    <div class="hud-progress-wrap">
-      <span>🌍</span>
-      <div class="hud-progress-bar"><div class="hud-progress-fill" id="hud-progress"></div></div>
-      <span>🌕</span>
-    </div>
-    <div class="hud-fuel-wrap">
-      <label>FUEL</label>
-      <div class="fuel-bar"><div class="fuel-fill" id="hud-fuel"></div></div>
-      <span id="hud-fuel-pct">100%</span>
-    </div>
+    <div class="hud-maxdist" id="hud-maxdist">Peak: <span>0</span> km</div>
+    <div class="hud-progress-wrap"><span>🌍</span><div class="hud-progress-bar"><div class="hud-progress-fill" id="hud-progress"></div></div><span>🌕</span></div>
+    <div class="hud-fuel-wrap"><label>FUEL</label><div class="fuel-bar"><div class="fuel-fill" id="hud-fuel"></div></div><span id="hud-fuel-pct">100%</span></div>
     <div class="hud-eta" id="hud-eta"></div>
     <div class="hud-clicks">Clicks: <span id="hud-clicks">0</span></div>
     <button class="btn-back" id="btn-back-dash">◀ Dashboard</button>
   </div>
-  <div id="click-zone" class="click-zone">
-    <div class="click-hint" id="click-hint">TAP / CLICK TO BOOST 🔥</div>
-  </div>
+  <div id="click-zone" class="click-zone"><div class="click-hint">TAP / CLICK TO BOOST 🔥</div></div>
   <div id="boost-fx" class="boost-fx"></div>
 </section>
 
-<!-- DASHBOARD -->
 <section id="screen-dashboard" class="screen">
   <div class="dash-wrap">
     <div class="podium-section">
@@ -111,17 +84,18 @@
           <div class="podium-flag-big" id="podium-flag-3"></div>
           <div class="podium-info" id="podium-info-3"></div>
           <div class="podium-dist" id="podium-dist-3"></div>
+          <div class="podium-maxdist" id="podium-maxdist-3"></div>
           <div class="podium-fuel-wrap"><div class="podium-fuel-bar"><div class="podium-fuel-fill" id="podium-fuel-3"></div></div><span class="podium-fuel-pct" id="podium-fuel-pct-3"></span></div>
           <button class="podium-boost-btn" id="podium-boost-3">⚡ BOOST +0.1 km</button>
           <div class="podium-pedestal pedestal-3rd"></div>
         </div>
         <div class="podium-slot podium-1st" id="podium-1" data-rank="1">
-          <div class="podium-crown">👑</div>
-          <div class="podium-rank">🥇</div>
+          <div class="podium-crown">👑</div><div class="podium-rank">🥇</div>
           <div class="podium-rocket-visual" id="podium-visual-1"></div>
           <div class="podium-flag-big" id="podium-flag-1"></div>
           <div class="podium-info" id="podium-info-1"></div>
           <div class="podium-dist" id="podium-dist-1"></div>
+          <div class="podium-maxdist" id="podium-maxdist-1"></div>
           <div class="podium-fuel-wrap"><div class="podium-fuel-bar"><div class="podium-fuel-fill" id="podium-fuel-1"></div></div><span class="podium-fuel-pct" id="podium-fuel-pct-1"></span></div>
           <button class="podium-boost-btn podium-boost-gold" id="podium-boost-1">⚡ BOOST +0.1 km</button>
           <div class="podium-pedestal pedestal-1st"></div>
@@ -132,6 +106,7 @@
           <div class="podium-flag-big" id="podium-flag-2"></div>
           <div class="podium-info" id="podium-info-2"></div>
           <div class="podium-dist" id="podium-dist-2"></div>
+          <div class="podium-maxdist" id="podium-maxdist-2"></div>
           <div class="podium-fuel-wrap"><div class="podium-fuel-bar"><div class="podium-fuel-fill" id="podium-fuel-2"></div></div><span class="podium-fuel-pct" id="podium-fuel-pct-2"></span></div>
           <button class="podium-boost-btn" id="podium-boost-2">⚡ BOOST +0.1 km</button>
           <div class="podium-pedestal pedestal-2nd"></div>
@@ -144,7 +119,6 @@
   </div>
 </section>
 
-<!-- STATS -->
 <section id="screen-stats" class="screen">
   <div class="stats-wrap">
     <h1 class="section-title">🏅 MOON LANDING STATISTICS</h1>
@@ -152,13 +126,8 @@
   </div>
 </section>
 
-<!-- MOON MODAL -->
 <div id="modal-moon" class="modal hidden">
-  <div class="modal-content">
-    <h1>🌕 MOON REACHED! 🎉</h1>
-    <div id="modal-details"></div>
-    <button class="btn-modal-close" id="btn-modal-close">CONTINUE</button>
-  </div>
+  <div class="modal-content"><h1>🌕 MOON REACHED! 🎉</h1><div id="modal-details"></div><button class="btn-modal-close" id="btn-modal-close">CONTINUE</button></div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>

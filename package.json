@@ -1,7 +1,7 @@
 {
   "name": "moon-race",
-  "version": "5.0.0",
-  "description": "Moon Race v5 \u2014 with Visitor Counter",
+  "version": "6.0.0",
+  "description": "Moon Race v6 \u2014 Fixed hover, maxDistance, persistent data",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
