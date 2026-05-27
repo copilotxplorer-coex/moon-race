@@ -1,7 +1,7 @@
 {
   "name": "moon-race",
-  "version": "6.0.0",
-  "description": "Moon Race v6 \u2014 Fixed hover, maxDistance, persistent data",
+  "version": "7.0.0",
+  "description": "Moon Race v7 \u2014 Share to X + Zero Jitter",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

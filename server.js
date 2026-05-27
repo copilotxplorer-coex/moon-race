@@ -29,14 +29,9 @@ const ROCKETS = {
   h3:        { name:"H3",        company:"JAXA",         flag:"🇯🇵" }
 };
 
-/* ══════════════════════════════════════════════
-   ★ PERSISTENT DATA SYSTEM
-   Uses /data volume on Railway (or local ./data)
-   ══════════════════════════════════════════════ */
 const DATA_DIR  = process.env.DATA_DIR || path.join(__dirname, "data");
 const DATA_FILE = path.join(DATA_DIR, "game_data.json");
 
-// Ensure data directory exists
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
   console.log(`📁 Created data directory: ${DATA_DIR}`);
@@ -47,7 +42,7 @@ function loadData() {
     if (fs.existsSync(DATA_FILE)) {
       const raw = fs.readFileSync(DATA_FILE, "utf8");
       const data = JSON.parse(raw);
-      console.log(`💾 Loaded data: ${Object.keys(data.rockets||{}).length} rockets, ${(data.stats||[]).length} landings, ${data.visitorTotal||0} visits`);
+      console.log(`💾 Loaded: ${Object.keys(data.rockets||{}).length} rockets, ${(data.stats||[]).length} landings, ${data.visitorTotal||0} visits`);
       return data;
     }
   } catch(e) { console.error("⚠️ Data load error:", e.message); }
@@ -56,30 +51,20 @@ function loadData() {
 
 function saveData() {
   try {
-    const data = {
-      rockets,
-      stats,
-      visitorTotal: visitors.total,
-      savedAt: new Date().toISOString()
-    };
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-  } catch(e) { console.error("⚠️ Data save error:", e.message); }
+    fs.writeFileSync(DATA_FILE, JSON.stringify({
+      rockets, stats, visitorTotal: visitors.total, savedAt: new Date().toISOString()
+    }, null, 2));
+  } catch(e) { console.error("⚠️ Save error:", e.message); }
 }
 
-// Load persisted data
 const savedData = loadData();
 const rockets   = savedData.rockets || {};
 const stats     = savedData.stats   || [];
 const visitors  = { total: savedData.visitorTotal || 0, online: 0 };
 
-// Auto-save every 30 seconds
 setInterval(saveData, 30000);
-
-// Save on process exit
 process.on("SIGTERM", () => { saveData(); process.exit(0); });
 process.on("SIGINT",  () => { saveData(); process.exit(0); });
-
-/* ══════════════════════════════════════════════ */
 
 function broadcastVisitors() {
   io.emit("visitors", { total: visitors.total, online: visitors.online });
@@ -91,30 +76,20 @@ function broadcastState(){
   io.emit("state", { rockets: active, stats });
 }
 
-/* Game loop 10 Hz */
 setInterval(()=>{
   let changed = false;
   for(const id in rockets){
     const r = rockets[id];
     if(!r.launched || r.crashed || r.reached) continue;
-
     r.fuel = Math.max(0, r.fuel - FUEL_DECAY);
-
     if(r.fuel <= 0){
       r.distance = Math.max(0, r.distance - FALL_SPEED);
       if(r.distance <= 0){ r.crashed = true; r.crashedAt = Date.now(); changed = true; }
     }
-
-    // ★ Track max distance
-    if(r.distance > (r.maxDistance || 0)){
-      r.maxDistance = r.distance;
-    }
-
+    if(r.distance > (r.maxDistance || 0)){ r.maxDistance = r.distance; }
     if(r.distance >= MOON){
-      r.distance = MOON;
-      r.maxDistance = MOON;
-      r.reached = true;
-      r.reachedAt = Date.now();
+      r.distance = MOON; r.maxDistance = MOON;
+      r.reached = true; r.reachedAt = Date.now();
       stats.push({
         country: r.country, code: r.code, captain: r.captain,
         rocket: ROCKETS[r.type]?.name, company: ROCKETS[r.type]?.company,
@@ -130,10 +105,8 @@ setInterval(()=>{
 }, 100);
 
 io.on("connection", socket=>{
-  visitors.total++;
-  visitors.online++;
-  broadcastVisitors();
-  saveData();
+  visitors.total++; visitors.online++;
+  broadcastVisitors(); saveData();
 
   socket.on("disconnect", ()=>{
     visitors.online = Math.max(0, visitors.online - 1);
@@ -145,12 +118,10 @@ io.on("connection", socket=>{
 
   socket.on("launch", d=>{
     const id = "r_"+Date.now()+"_"+Math.random().toString(36).slice(2,7);
-    const captainName = (d.captain || "Anonymous").slice(0, 24);
     rockets[id] = {
       id, country:d.country, code:d.code, type:d.type,
-      captain: captainName,
-      distance: INIT_BOOST, fuel: MAX_FUEL,
-      maxDistance: INIT_BOOST,
+      captain: (d.captain || "Anonymous").slice(0, 24),
+      distance: INIT_BOOST, fuel: MAX_FUEL, maxDistance: INIT_BOOST,
       launched:true, crashed:false, reached:false,
       clicks:0, launchedAt:Date.now()
     };
@@ -164,11 +135,9 @@ io.on("connection", socket=>{
     r.distance += CLICK_KM;
     r.fuel = Math.min(MAX_FUEL, r.fuel + FUEL_PER_CLICK);
     r.clicks++;
-    if(r.distance > (r.maxDistance || 0)){
-      r.maxDistance = r.distance;
-    }
+    if(r.distance > (r.maxDistance || 0)) r.maxDistance = r.distance;
   });
 });
 
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, ()=> console.log(`🚀  Moon Race v6 on port ${PORT} | Data: ${DATA_DIR}`));
+server.listen(PORT, ()=> console.log(`🚀  Moon Race v7 on port ${PORT} | Data: ${DATA_DIR}`));
